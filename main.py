@@ -35,9 +35,9 @@ workbook = openpyxl.load_workbook(args.file)
 # Seleccionar la primera fulla
 fulla = workbook['Colleccions-Publicacions']
 
-dades = dict() #key serà el nom
+colleccio = dict() #key serà el nom
 # Llegir les dades de la primera fila i imprimir-les
-for row in fulla.iter_rows(min_row=1,values_only=True):
+for row in fulla.iter_rows(min_row=2,values_only=True):
         nomCol = row[4]
         total_exemplars = row[5]
         genere = row[6]
@@ -46,10 +46,25 @@ for row in fulla.iter_rows(min_row=1,values_only=True):
         any_fi =row[9]
         tancada = row[10]
         isbn = row[11] #haurre de comprobar, si ja tinc coleccio guardada, nomes es guarda isbn
+        if nomCol in colleccio:
+                colleccio[nomCol]["isbn"].append(isbn)
+        if nomCol not in colleccio and nomCol != None:
+                colleccio[nomCol] = {"total_exemplars":total_exemplars,"genere": genere, "idioma": idioma, "any_inici": any_inici, "any_fi": any_fi, "tancada": tancada, "isbn": [isbn]}
+print(colleccio)
 
+# Verificar si la colecció existeix
+if "Colleccio" in db.list_collection_names():
+    print("La colecció 'Colleccio' ja existeix")
+    coll = db.productes
+else:
+    coll = db.create_collection("Colleccio")
+    print("La colecció 'Colleccio' ha sigut creada")
 
 # Tancar el fitxer Excel
 workbook.close()
+for key in colleccio:
+        col = colleccio[key]
+        db.Colleccio.insert_one({"nomCol":[nomCol],"total_exemplars":col["total_exemplars"], "genere": col["genere"], "idioma":col["idioma"],"any_inici":col["any_inici"],"any_fi":col["any_fi"],"tancada":col["tancada"],"isbn":col["isbn"]})
 
 #tanquem la colecció
 connection.close()
