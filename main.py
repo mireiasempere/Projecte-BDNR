@@ -1,4 +1,5 @@
 
+
 from pymongo import MongoClient
 import pandas as pd
 import argparse
@@ -64,7 +65,7 @@ else:
 workbook.close()
 for key in colleccio:
         col = colleccio[key]
-        db.Colleccio.insert_one({"nomCol":[nomCol],"total_exemplars":col["total_exemplars"], "genere": col["genere"], "idioma":col["idioma"],"any_inici":col["any_inici"],"any_fi":col["any_fi"],"tancada":col["tancada"],"isbn":col["isbn"]})
+        db.Colleccio.insert_one({"nomCol":key,"total_exemplars":col["total_exemplars"], "genere": col["genere"], "idioma":col["idioma"],"any_inici":col["any_inici"],"any_fi":col["any_fi"],"tancada":col["tancada"],"isbn":col["isbn"]})
 
 #tanquem la colecció
 connection.close()
