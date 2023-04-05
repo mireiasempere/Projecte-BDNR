@@ -1,0 +1,15 @@
+//1
+db.Publicacio.find({},{_id: 0, titol: 1, preu: 1}).sort({preu: -1}).limit(5)
+//2
+db.Publicacio.aggregate([
+   { $match: { NomEditorial: "Juniper Books" } },
+   {
+      $group:
+         {
+           _id: null,
+           max_preu: { $max: "$preu" },
+           min_preu: { $min: "$preu" },
+           avg_preu: { $avg: "$preu" }
+         }
+   }
+])
