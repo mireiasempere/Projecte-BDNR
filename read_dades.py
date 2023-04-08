@@ -37,7 +37,8 @@ try:
         for e in dict_coll_publ: #filtrem els camps Unnamed
             for k in e:
                 if type(e[k]) == str and e[k][0] == '[' and e[k][-1] == ']':
-                    e[k] = e[k].split()
+                    e[k] = e[k].replace(' ','')
+                    e[k] = e[k][1:-1].split(',')
         
         coll_publicacio.insert_many(dict_coll_publ)
 
@@ -81,5 +82,5 @@ except  FileNotFoundError:
     connection.drop_database('projecte')
     print("Error en la lectura del fitxer. Base de dades eliminada: projecte.")
 
-#except:
-    #print("Error en l'execució del codi. Base de dades eliminada: projecte.")
+except:
+    print("Error en l'execució del codi. Base de dades eliminada: projecte.")
