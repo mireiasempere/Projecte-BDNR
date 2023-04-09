@@ -1,6 +1,10 @@
-//1
+use projecte
+
+//1. Les 5 publicacions amb major preu. Mostrar només el títol i preu.
 db.Publicacio.find({},{_id: 0, titol: 1, preu: 1}).sort({preu: -1}).limit(5)
-//2
+
+//2. Valor màxim, mínim i mitjà del preus de les publicacions de l’editorial Juniper 
+Books
 db.Publicacio.aggregate([
    { $match: { NomEditorial: "Juniper Books" } },
    {
@@ -13,3 +17,30 @@ db.Publicacio.aggregate([
          }
    }
 ])
+
+
+//3. Artistes (nom artístic) que participen en més de 5 publicacions com a dibuixant.
+db.Publicacio.aggregate([
+    { $unwind: "$dibuixants" },
+    {$group: {_id : '$dibuixants', count : {$count : {}}}},
+    {$match: {count :{ $gt: 5}}},
+    {$project : { _id :1}}])
+    
+ //4. Numero de col·leccions per gènere. Mostra gènere i número total. 
+ NO FUNCIONA
+db.Publicacio.aggregate([
+  {$group: { _id: {NomColleccio: "$NomColleccio",genere: "$genere"}}},
+  {$unwind: '$_id.genere'},
+  {$group: {_id: '$_id.genere', num_coll : {$count:{}}}},
+  {$sort: {num_coll:-1}}])
+
+ 
+ //5. Per cada editorial, mostrar el recompte de col·leccions finalitzades i no finalitzades
+ db.Publicacio.aggregate([
+    {$group : { _id : {NomEditorial:'$NomEditorial', NomColleccio:'$NomColleccio',tancada : '$tancada'}},
+    {$group : {_id : '$_id.NomEditorial',
+    final : {$sum:{ $cond : { if : {$eq:['$_id.tancada',true]}, then : 1, else: 0}}},
+    no_final : {$sum:{ $cond : { if : {$eq:['$_id.tancada',false]}, then : 1, else: 0}}}}},
+    {$sort:{ '_id.NomEditorial' : 1}}
+    ])
+ 
