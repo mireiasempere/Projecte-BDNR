@@ -16,8 +16,23 @@ DSN = "mongodb://{}:{}".format(Host,Port)
 connection = MongoClient(DSN)
 db = connection['projecte']
 
+#python3 main2.py -f Dades.xlsx
+
+parser = argparse.ArgumentParser(description='Processar un fitxer Excel amb les dades')
+parser.add_argument('-f', '--file', type=str, required=True,help='El nom del fitxer Excel amb les dades')
+parser.add_argument('--delete_all', action='store_true', help='Esborrar tots els continguts de la BD')
+parser.add_argument('--bd', type=str, help='El nom de la base de dades')
+args = parser.parse_args()
+file = args.file
+delete_all = args.delete_all
+db = args.bd
+print("El fitxer Excel amb les dades és:", file)
+
+if delete_all:
+    connection.drop_database(db)
+    sys.exit(0)
 try:
-    file = 'difuh/Dades.xlsx'
+    #file = 'Dades.xlsx'
 
     # Verificar si la colecció existeix
     if "Publicacio" in db.list_collection_names():
