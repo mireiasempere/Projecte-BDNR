@@ -27,9 +27,9 @@ db.Publicacio.aggregate([
     {$project : { _id :1}}])
     
  //4. Numero de col·leccions per gènere. Mostra gènere i número total. 
- NO FUNCIONA
+ 
 db.Publicacio.aggregate([
-  {$group: { _id: {NomColleccio: "$NomColleccio",genere: "$genere"}}},
+  {$group: { _id: {NomColleccio: "$NomColleccio", NomEditorial:"$NomEditorial" ,genere: "$genere"}}},
   {$unwind: '$_id.genere'},
   {$group: {_id: '$_id.genere', num_coll : {$count:{}}}},
   {$sort: {num_coll:-1}}])
