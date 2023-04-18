@@ -57,13 +57,20 @@ db.Publicacio.aggregate([
 ])
 
 //7. Mostrar el país d’origen de l’artista o artistes que han fet més guions.
+
 db.Publicacio.aggregate([
   {$unwind: "$guionistes"},
-  {$group: { _id: "$guionistes", num_guions: {$sum: 1}, pais: {$first: "$paisAutor"} }},
+  {$group: { _id: "$guionistes", num_guions: {$sum: 1}},
+  {$lookup: {
+           from: "Artistes",
+           localField: "_id",
+           foreignField: "Nom_artistic",
+           as: "Artiste"}},
   {$sort: { num_guions: -1 }},
   {$limit: 1},
-  {$project: { _id: 0, artista: "$_id", pais: 1 }}
+  {$project: { _id: 0, pais: "$Artiste.pais" }}
 ])
+
 
 //8. Mostrar les publicacions amb tots els personatges de tipus “heroe”.
 db.Personatges.aggregate([
@@ -90,10 +97,12 @@ db.Personatges.aggregate([
 ])
 
 //9. Modificar el preu de les publicacions amb stock superior a 20 exemplars i incrementar-lo un 25%.
+
 db.Publicacio.updateMany(
-  { edicio: 1 },
+  { stock:{$gt:20}},
   { $mul: { preu: 1.25 } }
 )
+
 
 //10. Mostrar ISBN i títol de les publicacions conjuntament amb tota la seva informació dels personatges.
 db.Publicacio.aggregate([
