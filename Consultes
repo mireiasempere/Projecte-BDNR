@@ -74,5 +74,5 @@ db.Publicacio.updateMany(
   { $mul: { preu: 1.25 } }
 )
 
-//10. Mostrar ISBN i títol de les publicacions conjuntament amb tota la seva 
+//10. Mostrar ISBN i títol de les publicacions conjuntament amb tota la seva informació dels personatges.
 db.Publicacio.find({}, { ISBN: 1, titol: 1, personatges: 1 })
