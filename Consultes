@@ -41,7 +41,7 @@ db.Publicacio.aggregate([
     {$group : {_id : '$_id.NomEditorial',
     final : {$sum:{ $cond : { if : {$eq:['$_id.tancada',true]}, then : 1, else: 0}}},
     no_final : {$sum:{ $cond : { if : {$eq:['$_id.tancada',false]}, then : 1, else: 0}}}}},
-    {$sort:{ '_id.NomEditorial' : 1}}
+    {$sort:{ 'final' : -1}}
     ])
  
 
