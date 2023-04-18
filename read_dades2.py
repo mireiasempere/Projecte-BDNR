@@ -88,4 +88,5 @@ except  FileNotFoundError:
     print("Error en la lectura del fitxer. Base de dades eliminada: projecte.")
 
 except:
+    connection.drop_database('projecte')
     print("Error en l'execució del codi. Base de dades eliminada: projecte.")
