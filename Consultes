@@ -45,7 +45,9 @@ db.Publicacio.aggregate([
     ])
  
 
-//6
+//6. Mostrar les 2 col·leccions ja finalitzades amb més publicacions. Mostrar 
+editorial i nom col·lecció.
+
 db.Publicacio.aggregate([
   {$match: { tancada: true }},
   {$group: { _id: { NomEditorial: "$NomEditorial", NomColleccio: "$NomColleccio" }, num_publicacions: { $sum: 1 } }},
@@ -54,7 +56,7 @@ db.Publicacio.aggregate([
   {$project: { _id: 0, NomEditorial: "$_id.NomEditorial", NomColleccio: "$_id.NomColleccio" }}
 ])
 
-//7
+//7. Mostrar el país d’origen de l’artista o artistes que han fet més guions.
 db.Publicacio.aggregate([
   {$unwind: "$guionistes"},
   {$group: { _id: "$guionistes", num_guions: {$sum: 1}, pais: {$first: "$paisAutor"} }},
@@ -63,14 +65,14 @@ db.Publicacio.aggregate([
   {$project: { _id: 0, artista: "$_id", pais: 1 }}
 ])
 
-//8
+//8. Mostrar les publicacions amb tots els personatges de tipus “heroe”.
 db.Publicacio.find({ personatges: { $all: ["heroe"] } })
 
-//9
+//9. Modificar el preu de les publicacions de primera edició i incrementar-lo un 25%.
 db.Publicacio.updateMany(
   { edicio: 1 },
   { $mul: { preu: 1.25 } }
 )
 
-//10
+//10. Mostrar ISBN i títol de les publicacions conjuntament amb tota la seva 
 db.Publicacio.find({}, { ISBN: 1, titol: 1, personatges: 1 })
