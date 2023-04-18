@@ -30,6 +30,7 @@ print("El fitxer Excel amb les dades és:", file)
 
 if delete_all:
     connection.drop_database(db)
+    print("Base de dades eliminada. Tancant programa.")
     sys.exit(0)
 try:
     #file = 'Dades.xlsx'
