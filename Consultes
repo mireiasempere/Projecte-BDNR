@@ -68,7 +68,7 @@ db.Publicacio.aggregate([
 //8. Mostrar les publicacions amb tots els personatges de tipus “heroe”.
 db.Publicacio.find({ personatges: { $all: ["heroe"] } })
 
-//9. Modificar el preu de les publicacions de primera edició i incrementar-lo un 25%.
+//9. Modificar el preu de les publicacions amb stock superior a 20 exemplars i incrementar-lo un 25%.
 db.Publicacio.updateMany(
   { edicio: 1 },
   { $mul: { preu: 1.25 } }
