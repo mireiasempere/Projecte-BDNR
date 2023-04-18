@@ -14,7 +14,8 @@ db.Publicacio.aggregate([
            min_preu: { $min: "$preu" },
            avg_preu: { $avg: "$preu" }
          }
-   }
+   },
+   {$project : {_id:0}}
 ])
 
 
